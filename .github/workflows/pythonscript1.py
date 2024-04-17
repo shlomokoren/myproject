@@ -1,25 +1,22 @@
 import requests
 
-def get_data(url):
+def get_versions(api_url):
     try:
-        response = requests.get(url)
-        # Check if the request was successful (status code 200)
-        if response.status_code == 200:
-            return response.json()  # Parse response as JSON and return
-        else:
-            print(f"Error: {response.status_code} - {response.reason}")
-            return None
+        response = requests.get(api_url)
+        response.raise_for_status()  # Raise an exception for HTTP errors
+        data = response.json()  # Parse response as JSON
+        return [tag["name"] for tag in data["results"]]  # Extract version names
     except requests.RequestException as e:
         print(f"Request Error: {e}")
         return None
 
 # Example usage
 if __name__ == "__main__":
-    api_url = "https://hub.docker.com/v2/repositories/library/mariadb/tags"  # Example API endpoint
-    data = get_data(api_url)
-    if data:
-        print("Data received:")
-        print(data)
+    api_url = "https://hub.docker.com/v2/repositories/atlassian/jira-software/tags/"
+    versions = get_versions(api_url)
+    if versions:
+        print("Versions:")
+        for version in versions:
+            print(version)
     else:
-        print("Failed to fetch data.")
-
+        print("Failed to fetch versions.")
