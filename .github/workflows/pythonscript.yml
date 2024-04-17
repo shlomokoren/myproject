@@ -1,0 +1,21 @@
+name: Run Python Script
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  run_python_script:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'  # You can specify the Python version here
+
+      - name: Run Python script
+        run: python .github/workflows/pythonscript1.py  # Specify the path to your Python script here
