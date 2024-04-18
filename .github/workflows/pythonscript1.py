@@ -1,5 +1,6 @@
 import requests
 import re
+import json
 
 def get_versions(api_url):
     versions = []
@@ -27,35 +28,48 @@ def get_versions(api_url):
     return versions
 
 def getlastJiarVarsion(versions):
-
-    # Define your regex pattern
+    lastversion = ""
     pattern = r'\b\d{1,3}\.\d{1,3}(?:\.\d{1,3})?\b$'
-
-    # Example list
-
-
     # Check each element in the list against the pattern
     matches = [element for element in versions if re.match(pattern, element)]
 #    print(matches)
-    lastversion = matches[0]
-#    matches = [element for element in versions if re.match(pattern, element)]
-#    print(matches)
-
+    if len(matches)> 0:
+        lastversion = matches[0]
     return lastversion
+
 def getProductLastVersionrule1(product):
-    lastProductVersion = ""
+    lastProductVersion = None
+    data={"name":product,"lastversion":""}
     api_url = "https://hub.docker.com/v2/repositories/"+product+"/tags/"
-    versions = get_versions(api_url)
-    if not versions:
+    versions = None
+    try:
+        versions = get_versions(api_url)
+        if not versions:
+            print("Failed to fetch versions.")
+            return None
+    except:
         print("Failed to fetch versions.")
-        return lastProductVersion
+        return None
+
     lastProductVersion = getlastJiarVarsion(versions)
+    data = {"product":product,"lastVersion": lastProductVersion}
     print( product +" last version is " + getlastJiarVarsion(versions))
-    return lastProductVersion
+    return data
 # Example usage
 if __name__ == "__main__":
-    product = "atlassian/jira-software"
-    getProductLastVersionrule1(product)
+    json_array = []
+    json_array.append(getProductLastVersionrule1("atlassian/jira-software"))
+    json_array.append(getProductLastVersionrule1("atlassian/bitbucket"))
+    json_array.append(getProductLastVersionrule1("atlassian/confluence"))
+    json_array.append(getProductLastVersionrule1("jenkins/jenkins"))
+    json_array.append(getProductLastVersionrule1("library/nginx"))
+    #    json_array.append(getProductLastVersionrule1("library/sonarqube"))
 
-    product = "jenkins/jenkins"
-    getProductLastVersionrule1(product)
+    # Convert the list to a JSON array
+    json_string = json.dumps(json_array)
+
+    # Write the JSON array to a file
+    with open("output.json", "w") as json_file:
+        json_file.write(json_string)
+
+
