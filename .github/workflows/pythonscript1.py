@@ -69,7 +69,7 @@ if __name__ == "__main__":
     json_string = json.dumps(json_array)
 
     # Write the JSON array to a file
-    with open("output.json", "w") as json_file:
-        json_file.write(json_string)
+    with open("products_versions.json", "w") as json_file:
+     result =   json_file.write(json_string)
 
 

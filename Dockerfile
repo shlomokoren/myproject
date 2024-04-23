@@ -1,3 +1,2 @@
-From ubuntu
-RUN apt-get update -y
-RUN apt-get install -y telnet 
+From ngnx
+cp products_versions.json /usr/share/nginx/html/products_versions.json
