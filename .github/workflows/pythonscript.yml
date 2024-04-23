@@ -20,3 +20,5 @@ jobs:
         run: pip install requests
       - name: Run Python script
         run: python .github/workflows/pythonscript1.py  # Specify the path to your Python script here
+      - name: list files
+        run: ls
