@@ -24,6 +24,8 @@ jobs:
         run: python .github/workflows/pythonscript1.py  # Specify the path to your Python script here
       - name: list files
         run: ls
+      - name: cat products_versions.json
+        run: cat products_versions.json
       - name: Docker Login
         uses: docker/login-action@v1.8.0
         with:
