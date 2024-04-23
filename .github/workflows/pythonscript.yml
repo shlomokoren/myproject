@@ -1,12 +1,14 @@
 name: Run Python Script
 
 on:
+  schedule:
+    - cron: '0 0 * * *' # Runs every day at midnight UTC
   push:
     branches:
       - main
 #
 jobs:
-  run_python_script:
+  getProductsLastVersions_script:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
