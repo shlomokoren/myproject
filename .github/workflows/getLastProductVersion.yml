@@ -21,7 +21,7 @@ jobs:
       - name: Install requests library
         run: pip install requests
       - name: Run Python script
-        run: python .github/workflows/pythonscript1.py  # Specify the path to your Python script here
+        run: python .github/workflows/getLastProductVersion.py  # Specify the path to your Python script here
       - name: list files
         run: ls
       - name: cat products_versions.json

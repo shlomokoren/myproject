@@ -27,14 +27,16 @@ def get_versions(api_url):
 
     return versions
 
-def getlastJiarVarsion(versions):
+def getlastVersion(versions):
     lastversion = ""
     pattern = r'\b\d{1,3}\.\d{1,3}(?:\.\d{1,3})?\b$'
     # Check each element in the list against the pattern
     matches = [element for element in versions if re.match(pattern, element)]
 #    print(matches)
     if len(matches)> 0:
-        lastversion = matches[0]
+        sorted_versions = sorted(matches, key=lambda x: tuple(map(int, x.split('.'))))
+        lastversion = sorted_versions[-1]
+ #       lastversion = matches[0]
     return lastversion
 
 def getProductLastVersionrule1(product):
@@ -51,9 +53,9 @@ def getProductLastVersionrule1(product):
         print("Failed to fetch versions.")
         return None
 
-    lastProductVersion = getlastJiarVarsion(versions)
+    lastProductVersion = getlastVersion(versions)
     data = {"product":product,"lastVersion": lastProductVersion}
-    print( product +" last version is " + getlastJiarVarsion(versions))
+    print(product +" last version is " + lastProductVersion)
     return data
 # Example usage
 if __name__ == "__main__":
