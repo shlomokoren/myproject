@@ -27,16 +27,18 @@ def get_versions(api_url):
 
     return versions
 
-def getlastVersion(versions):
+def getlastVersion(versions,product):
     lastversion = ""
     pattern = r'\b\d{1,3}\.\d{1,3}(?:\.\d{1,3})?\b$'
+    if(product == "library/sonarqube"):
+        pattern = r'\b\d{1,3}\.\d{1,3}(?:\.\d{1,3})?-enterprise\b$'
     # Check each element in the list against the pattern
     matches = [element for element in versions if re.match(pattern, element)]
 #    print(matches)
     if len(matches)> 0:
-        sorted_versions = sorted(matches, key=lambda x: tuple(map(int, x.split('.'))))
+        sorted_versions = sorted(matches, key=lambda x: [int(num) if num.isdigit() else num for num in
+                                                         x.split('-')[0].split('.')])
         lastversion = sorted_versions[-1]
- #       lastversion = matches[0]
     return lastversion
 
 def getProductLastVersionrule1(product):
@@ -53,7 +55,7 @@ def getProductLastVersionrule1(product):
         print("Failed to fetch versions.")
         return None
 
-    lastProductVersion = getlastVersion(versions)
+    lastProductVersion = getlastVersion(versions,product)
     data = {"product":product,"lastVersion": lastProductVersion}
     print(product +" last version is " + lastProductVersion)
     return data
@@ -91,7 +93,7 @@ if __name__ == "__main__":
     json_array.append(getProductLastVersionrule1("atlassian/confluence"))
     json_array.append(getProductLastVersionrule1("jenkins/jenkins"))
     json_array.append(getProductLastVersionrule1("library/nginx"))
-    #    json_array.append(getProductLastVersionrule1("library/sonarqube"))
+    json_array.append(getProductLastVersionrule1("library/sonarqube"))
 
     # Convert the list to a JSON array
     json_string = json.dumps(json_array)
@@ -106,7 +108,7 @@ if __name__ == "__main__":
     # Write HTML table to a file
     with open("products_versions.html", "w") as f:
         f.write(html_table)
-        print("HTML table has been written to output.html")
+        print("HTML table has been written to products_versions.html")
 
 
 
