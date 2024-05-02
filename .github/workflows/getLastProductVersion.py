@@ -57,7 +57,32 @@ def getProductLastVersionrule1(product):
     data = {"product":product,"lastVersion": lastProductVersion}
     print(product +" last version is " + lastProductVersion)
     return data
-# Example usage
+
+def json_to_html_table(json_str):
+    try:
+        data = json.loads(json_str)
+        if not isinstance(data, list):
+            raise ValueError("Input JSON must be a list")
+
+        html = "<table border='1' style='text-align:left; border-collapse: collapse;'>\n"  # Added border-collapse for better borders
+        html += "<tr style='background-color:#f2f2f2;'><th style='background-color:#ddd;'>Product</th><th style='background-color:#ddd;'>Last Version</th></tr>\n"  # Header row with background color
+
+        # Alternate row colors for better readability
+        for i, entry in enumerate(data):
+            product = entry.get("product", "")
+            last_version = entry.get("lastVersion", "")
+            bgcolor = "#ffffff" if i % 2 == 0 else "#f2f2f2"
+            html += f"<tr style='background-color:{bgcolor};'><td>{product}</td><td>{last_version}</td></tr>\n"
+
+        html += "</table>"
+        return html
+    except json.JSONDecodeError as e:
+        print("Error decoding JSON:", e)
+    except Exception as e:
+        print("An error occurred:", e)
+
+
+# start
 if __name__ == "__main__":
     json_array = []
     json_array.append(getProductLastVersionrule1("atlassian/jira-software"))
@@ -72,6 +97,15 @@ if __name__ == "__main__":
 
     # Write the JSON array to a file
     with open("products_versions.json", "w") as json_file:
-     result =   json_file.write(json_string)
+         result = json_file.write(json_string)
+
+    # Convert JSON to HTML table
+    html_table = json_to_html_table(json_string)
+
+    # Write HTML table to a file
+    with open("products_versions.html", "w") as f:
+        f.write(html_table)
+        print("HTML table has been written to output.html")
+
 
 
