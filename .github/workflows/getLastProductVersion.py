@@ -65,7 +65,7 @@ def json_to_html_table(json_str):
             raise ValueError("Input JSON must be a list")
 
         html = "<table border='1' style='text-align:left; border-collapse: collapse;'>\n"  # Added border-collapse for better borders
-        html += "<tr style='background-color:#f2f2f2;'><th style='background-color:#ddd;'>Product Name</th><th style='background-color:#ddd;'>Prdoduct Last Version</th></tr>\n"  # Header row with background color
+        html += "<tr style='background-color:#f2f2f2;'><th style='background-color:#ddd;'>Product Name</th><th style='background-color:#ddd;'>Product Last Version</th></tr>\n"  # Header row with background color
 
         # Alternate row colors for better readability
         for i, entry in enumerate(data):
