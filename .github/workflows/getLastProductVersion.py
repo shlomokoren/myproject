@@ -86,6 +86,7 @@ def json_to_html_table(json_str):
 if __name__ == "__main__":
     json_array = []
     json_array.append(getProductLastVersionrule1("atlassian/jira-software"))
+    json_array.append(getProductLastVersionrule1("atlassian/jira-servicemanagement"))
     json_array.append(getProductLastVersionrule1("atlassian/bitbucket"))
     json_array.append(getProductLastVersionrule1("atlassian/confluence"))
     json_array.append(getProductLastVersionrule1("jenkins/jenkins"))
