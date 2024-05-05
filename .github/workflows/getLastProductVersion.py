@@ -94,6 +94,10 @@ if __name__ == "__main__":
     json_array.append(getProductLastVersionrule1("jenkins/jenkins"))
     json_array.append(getProductLastVersionrule1("library/nginx"))
     json_array.append(getProductLastVersionrule1("library/sonarqube"))
+    json_array.append(getProductLastVersionrule1("airbyte/airbyte-api-server"))
+    json_array.append(getProductLastVersionrule1("airbyte/server"))
+    json_array.append(getProductLastVersionrule1("airbyte/bootloader"))
+    json_array.append(getProductLastVersionrule1("dynatrace/dynatrace-operator"))
 
     # Convert the list to a JSON array
     json_string = json.dumps(json_array)
