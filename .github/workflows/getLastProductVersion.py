@@ -1,6 +1,7 @@
 import requests
 import re
 import json
+from datetime import datetime
 
 def get_versions(api_url):
     versions = []
@@ -43,7 +44,7 @@ def getlastVersion(versions,product):
 
 def getProductLastVersionrule1(product):
     lastProductVersion = None
-    data={"name":product,"lastversion":""}
+    data={"name":product,"lastversion":"","reportDate":current_date_string}
     api_url = "https://hub.docker.com/v2/repositories/"+product+"/tags/"
     versions = None
     try:
@@ -56,7 +57,7 @@ def getProductLastVersionrule1(product):
         return None
 
     lastProductVersion = getlastVersion(versions,product)
-    data = {"product":product,"lastVersion": lastProductVersion}
+    data = {"product":product,"lastVersion": lastProductVersion,"reportDate":current_date_string}
     print(product +" last version is " + lastProductVersion)
     return data
 
@@ -65,9 +66,24 @@ def json_to_html_table(json_str):
         data = json.loads(json_str)
         if not isinstance(data, list):
             raise ValueError("Input JSON must be a list")
+        html = f"""
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>products versions</title>
+        </head>
+        <body>
+        """
+        html += "<H1>Products Versions Report for "+current_date_string+"</H1>"
 
-        html = "<table border='1' style='text-align:left; border-collapse: collapse;'>\n"  # Added border-collapse for better borders
-        html += "<tr style='background-color:#f2f2f2;'><th style='background-color:#ddd;'>Product Name</th><th style='background-color:#ddd;'>Product Last Version</th></tr>\n"  # Header row with background color
+        html += """
+               <table border='1' style='text-align:left; border-collapse: collapse;'>
+                <tr style='background-color:#f2f2f2;'><th style='background-color:#ddd;'>Product Name</th><th style='background-color:#ddd;'>Product Last Version</th></tr>
+        """  # Header row with background color
+#        html = "<table border='1' style='text-align:left; border-collapse: collapse;'>\n"  # Added border-collapse for better borders
+#        html += "<tr style='background-color:#f2f2f2;'><th style='background-color:#ddd;'>Product Name</th><th style='background-color:#ddd;'>Product Last Version</th></tr>\n"  # Header row with background color
 
         # Alternate row colors for better readability
         for i, entry in enumerate(data):
@@ -76,7 +92,12 @@ def json_to_html_table(json_str):
             bgcolor = "#ffffff" if i % 2 == 0 else "#f2f2f2"
             html += f"<tr style='background-color:{bgcolor};'><td>{product}</td><td>{last_version}</td></tr>\n"
 
-        html += "</table>"
+ #       html += "</table>"
+        html += """
+             </table>
+         </body>
+         </html>
+         """
         return html
     except json.JSONDecodeError as e:
         print("Error decoding JSON:", e)
@@ -87,6 +108,10 @@ def json_to_html_table(json_str):
 # start
 if __name__ == "__main__":
     json_array = []
+    current_datetime = datetime.now()
+    global current_date_string
+    current_date_string = current_datetime.strftime("%d-%m-%Y")  # Format as "YYYY-MM-DD"
+
     json_array.append(getProductLastVersionrule1("atlassian/jira-software"))
     json_array.append(getProductLastVersionrule1("atlassian/jira-servicemanagement"))
     json_array.append(getProductLastVersionrule1("atlassian/bitbucket"))
