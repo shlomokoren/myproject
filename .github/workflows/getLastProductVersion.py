@@ -111,7 +111,7 @@ if __name__ == "__main__":
     current_datetime = datetime.now()
     global current_date_string
     current_date_string = current_datetime.strftime("%d-%m-%Y")  # Format as "YYYY-MM-DD"
-
+    print("current_date_string is " + current_date_string)
     json_array.append(getProductLastVersionrule1("atlassian/jira-software"))
     json_array.append(getProductLastVersionrule1("atlassian/jira-servicemanagement"))
     json_array.append(getProductLastVersionrule1("atlassian/bitbucket"))
