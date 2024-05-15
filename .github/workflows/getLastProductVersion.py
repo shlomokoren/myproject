@@ -14,11 +14,16 @@ def get_versions(api_url):
             response = requests.get(api_url, params=params)
             response.raise_for_status()  # Raise an exception for HTTP errors
             data = response.json()  # Parse response as JSON
+            try:
+                pageCont = int(data["count"] / per_page) + 1
+            except:
+                print("pageCont error")
+
             results = data["results"]
             if not results:  # Stop if no more results are returned
                 break
             versions.extend(tag["name"] for tag in results)
-            if page < 2:
+            if page < pageCont:
                 page += 1
             else:
                 break
