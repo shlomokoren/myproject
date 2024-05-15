@@ -16,6 +16,8 @@ def get_versions(api_url):
             data = response.json()  # Parse response as JSON
             try:
                 pageCont = int(data["count"] / per_page) + 1
+                if page == 1 :
+                    print("    count is " + str(data["count"]) + "  pageCont is " + str(pageCont) + " in " + api_url)
             except:
                 print("pageCont error")
 
