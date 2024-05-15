@@ -2,6 +2,7 @@ import requests
 import re
 import json
 from datetime import datetime
+import time
 
 def get_versions(api_url):
     versions = []
@@ -27,6 +28,7 @@ def get_versions(api_url):
             versions.extend(tag["name"] for tag in results)
             if page < pageCont:
                 page += 1
+                time.sleep(2)
             else:
                 break
     except requests.RequestException as e:
